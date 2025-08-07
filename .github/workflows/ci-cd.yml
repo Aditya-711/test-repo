@@ -3,6 +3,10 @@ name: CI/CD Pipeline
 on:
   workflow_dispatch:
     inputs:
+      choose_repository:
+        required: true
+        description: "Chooses which repositories workflow to run"
+        type: string
       port_context:
         required: true
         description: "Details about the action and general context (blueprint, run id, etc...)"
@@ -45,4 +49,4 @@ jobs:
           baseUrl: https://api.getport.io
           runId: ${{ fromJson(inputs.port_context).runId }}
           logMessage: |
-            GitHub Action result for ${{ env.GITHUB_ACTION_TYPE }} action on PR ${{ env.PR_NUMBER }}: ${{ env.GITHUB_ACTION_RESULT_MESSAGE }}
+            GitHub Action result for action on Workflow: ${{ env.GITHUB_ACTION_RESULT_MESSAGE }}
