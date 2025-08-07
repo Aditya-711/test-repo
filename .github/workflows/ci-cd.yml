@@ -50,6 +50,8 @@ jobs:
           operation: PATCH_RUN
           baseUrl: https://api.getport.io
           runId: ${{ fromJson(inputs.port_context).runId }}
+          logMessage: |
+            Application deployed successfully. View it here http://100.26.22.241:3000
           status: SUCCESS
 
     - name: Run SSH commands on EC2
