@@ -11,9 +11,9 @@ on:
         required: true
         description: "Details about the action and general context (blueprint, run id, etc...)"
         type: string
-#   push:
-#     branches:
-#       - master
+  push:
+    branches:
+      - master
 
 
 
