@@ -30,3 +30,14 @@ jobs:
     - name: Deploy to VM (Mock step)
       run: |
           echo "Deploy logic goes here"
+
+    - name: Notify Port
+      uses: port-labs/port-github-action@v1
+      with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          operation: PATCH_RUN
+          baseUrl: https://api.getport.io
+          runId: ${{ fromJson(inputs.port_context).runId }}
+          logMessage: |
+            GitHub Action result for ${{ env.GITHUB_ACTION_TYPE }} action on PR ${{ env.PR_NUMBER }}: ${{ env.GITHUB_ACTION_RESULT_MESSAGE }}
