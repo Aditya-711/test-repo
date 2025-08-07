@@ -11,6 +11,10 @@ on:
         required: true
         description: "Details about the action and general context (blueprint, run id, etc...)"
         type: string
+      hostname:
+        required: false
+        description: "hostnmae"
+        type: string
 
 
 
