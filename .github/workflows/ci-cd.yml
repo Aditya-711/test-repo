@@ -35,6 +35,15 @@ jobs:
 
     - name: Run tests
       run: npm test
+    
+    - name: Deploy to EC2
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "."
+        target: "~/app"
 
     - name: Notify Port
       uses: port-labs/port-github-action@v1
@@ -44,17 +53,6 @@ jobs:
           operation: PATCH_RUN
           baseUrl: https://api.getport.io
           runId: ${{ fromJson(inputs.port_context).runId }}
-          logMessage: |
-            GitHub Action result for action on Workflow
-
-    - name: Deploy to EC2
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_KEY }}
-        source: "."
-        target: "~/app"
 
     - name: Run SSH commands on EC2
       uses: appleboy/ssh-action@v1.0.0
