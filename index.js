@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
       </head>
       <body>
         <h1>Hello!</h1>
-        <p>This is a simple HTML page .</p>
+        <p>This is a very very simple HTML page .</p>
       </body>
     </html>
   `);
