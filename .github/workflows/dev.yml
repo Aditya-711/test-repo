@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline - DEV
 
 on:
   workflow_dispatch:
@@ -14,10 +14,6 @@ on:
       hostname:
         required: false
         description: "hostnmae"
-        type: string
-      environment:
-        required: false
-        description: "development or production"
         type: string
 
 
@@ -59,7 +55,7 @@ jobs:
           baseUrl: https://api.getport.io
           runId: ${{ fromJson(inputs.port_context).runId }}
           logMessage: |
-            Application deployed successfully in Production environment. View it here http://${{fromJson(inputs.port_context).host}}:3000
+            Application deployed successfully in DEV environment. View it here http://${{fromJson(inputs.port_context).host}}:3000
           status: SUCCESS
 
     - name: Run SSH commands on EC2
