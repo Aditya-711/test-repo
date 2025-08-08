@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
         <title>Sample App</title>
       </head>
       <body>
-        <h1>Hello Aditya!</h1>
+        <h1>Hello Prashant!</h1>
         <p>This is a very very simple HTML page .</p>
       </body>
     </html>
