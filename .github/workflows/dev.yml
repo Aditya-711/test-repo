@@ -15,6 +15,10 @@ on:
         required: false
         description: "hostnmae"
         type: string
+      environment:
+        required: false
+        description: "development env"
+        type: string
 
 
 

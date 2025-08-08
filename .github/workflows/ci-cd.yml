@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline - Prod
 
 on:
   workflow_dispatch:
@@ -17,7 +17,7 @@ on:
         type: string
       environment:
         required: false
-        description: "development or production"
+        description: "production env"
         type: string
 
 
