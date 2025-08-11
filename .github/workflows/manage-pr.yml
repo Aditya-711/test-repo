@@ -1,0 +1,53 @@
+name: Manage Pull Request
+
+on:
+  workflow_dispatch:
+    inputs:
+      port_context:
+        required: true
+        description: "Details about the action and general context (blueprint, run id, etc...)"
+        type: string
+      action:
+        description: 'Action to perform: close, merge, approve'
+        required: true
+        type: choice
+        options:
+          - close
+          - merge
+          - approve
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+        type: string
+
+jobs:
+  manage-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Update pull request branch
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: gh pr merge --merge --repo Aditya-711/test-repo ${{ github.event.inputs.pr_number }}
+
+      - name: Perform PR action
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          case "${{ github.event.inputs.action }}" in
+            close)
+              gh pr close ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }}
+              ;;
+            merge)
+              gh pr merge ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }} --merge --auto
+              ;;
+            approve)
+              gh pr review ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }} --approve
+              ;;
+            *)
+              echo "Invalid action: ${{ github.event.inputs.action }}"
+              exit 1
+              ;;
+          esac
