@@ -26,10 +26,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Set up GitHub CLI
-        uses: actions/setup-gh-cli@v2
-
+        
       - name: Perform PR action
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
