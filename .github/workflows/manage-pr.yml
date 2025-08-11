@@ -3,6 +3,10 @@ name: Manage Pull Request
 on:
   workflow_dispatch:
     inputs:
+      port_context:
+        required: true
+        description: "Details about the action and general context (blueprint, run id, etc...)"
+        type: string
       action:
         description: 'Action to perform: close, merge, approve'
         required: true
