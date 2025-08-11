@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update pull request branch
-        run: gh pr update ${{ github.event.inputs.pr_number }} --repo Aditya-711/test-repo
+        run: gh pr merge --merge --repo Aditya-711/test-repo ${{ github.event.inputs.pr_number }}
 
       - name: Perform PR action
         env:
