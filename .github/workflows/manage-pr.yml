@@ -1,1 +1,47 @@
+name: Manage Pull Request
 
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform: close, merge, approve'
+        required: true
+        type: choice
+        options:
+          - close
+          - merge
+          - approve
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+        type: string
+
+jobs:
+  manage-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v3
+
+      - name: Perform PR action
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          case "${{ github.event.inputs.action }}" in
+            close)
+              gh pr close ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }}
+              ;;
+            merge)
+              gh pr merge ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }} --auto
+              ;;
+            approve)
+              gh pr review ${{ github.event.inputs.pr_number }} --repo ${{ github.repository }} --approve
+              ;;
+            *)
+              echo "Invalid action: ${{ github.event.inputs.action }}"
+              exit 1
+              ;;
+          esac
