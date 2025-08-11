@@ -26,7 +26,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        
+
+      - name: Update pull request branch
+        run: gh pr update ${{ github.event.inputs.pr_number }} --repo Aditya-711/test-repo
+
       - name: Perform PR action
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
