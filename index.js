@@ -9,12 +9,13 @@ app.get('/', (req, res) => {
         <title>Sample App</title>
       </head>
       <body>
-        <h1>Hello Aruna Ma'am!</h1>
+        <h1>Hello Everyone!</h1>
         <p>This is a very simple HTML page .</p>
       </body>
     </html>
   `);
 });
+console.log(process.argv[2]);
 app.listen(3000,'0.0.0.0' ,() => {
   console.log(`Server running at http://localhost:${port}`);
 });
