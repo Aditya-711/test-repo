@@ -1,0 +1,77 @@
+Certainly! Below is a basic **GitHub Actions workflow YAML** to build and deploy a containerized application to **Google Cloud Run** whenever code is pushed to the `main` branch.
+
+## Assumptions
+- Your code has a `Dockerfile` in the root.
+- You have set these **secrets** in your GitHub repository:
+  - `GCP_PROJECT_ID`
+  - `GCP_SA_KEY` (JSON: Google service account with permissions to deploy to Cloud Run)
+  - `CLOUD_RUN_SERVICE` (Cloud Run service name)
+  - `CLOUD_RUN_REGION` (ex: `us-central1`)
+- You have enabled Artifact Registry or using GCR (`gcr.io`).
+
+---
+
+```yaml
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Google Cloud SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      # Configure Docker to use Google Cloud auth
+      - name: Configure Docker for Google Cloud
+        run: gcloud auth configure-docker --quiet
+
+      # Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.CLOUD_RUN_SERVICE }}:${{ github.sha }} .
+
+      # Push Docker image
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.CLOUD_RUN_SERVICE }}:${{ github.sha }}
+
+      # Deploy to Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.CLOUD_RUN_SERVICE }}:${{ github.sha }} \
+            --region ${{ secrets.CLOUD_RUN_REGION }} \
+            --platform managed \
+            --allow-unauthenticated
+
+```
+
+---
+
+### How to set up secrets in GitHub
+
+- Go to your repository → Settings → Secrets → Actions → New repository secret.
+- Add entries for:
+  - `GCP_PROJECT_ID`
+  - `GCP_SA_KEY`
+  - `CLOUD_RUN_SERVICE`
+  - `CLOUD_RUN_REGION`
+
+---
+
+**Let me know if you need a non-Docker deployment, custom environments, or multi-service deploy!**
